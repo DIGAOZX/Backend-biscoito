@@ -7,7 +7,7 @@ import java.util.UUID;
 public class FortunePhrase {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO) // Geração automática
     private UUID id;
 
     @Column(nullable = false, unique = true)
