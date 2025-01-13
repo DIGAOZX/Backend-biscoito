@@ -8,7 +8,7 @@
 		<version>3.4.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.biscoitosorte</groupId>
+	<groupId>biscoitosorte</groupId>
 	<artifactId>biscoito-sorte</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Biscoito Sorte</name>
