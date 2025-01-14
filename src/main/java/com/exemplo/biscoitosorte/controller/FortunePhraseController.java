@@ -38,7 +38,8 @@ public class FortunePhraseController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        // Chamando o método delete sem tentar capturar um valor booleano
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();  // Retornando a resposta apropriada
     }
 }
