@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class FortuneCookieService {
@@ -19,7 +18,7 @@ public class FortuneCookieService {
     @Autowired
     private FortunePhraseRepository phraseRepository;
 
-    public FortuneCookie create(FortuneCookie cookie, UUID phraseId) {
+    public FortuneCookie create(FortuneCookie cookie, Long phraseId) { // Alterado para Long
         FortunePhrase phrase = phraseRepository.findById(phraseId)
                 .orElseThrow(() -> new RuntimeException("Frase não encontrada!"));
         cookie.setFrase(phrase);
@@ -30,11 +29,11 @@ public class FortuneCookieService {
         return cookieRepository.findAll();
     }
 
-    public FortuneCookie findById(UUID id) {
+    public FortuneCookie findById(Long id) { // Alterado para Long
         return cookieRepository.findById(id).orElseThrow(() -> new RuntimeException("Biscoito não encontrado!"));
     }
 
-    public FortuneCookie update(UUID id, FortuneCookie cookie, UUID phraseId) {
+    public FortuneCookie update(Long id, FortuneCookie cookie, Long phraseId) { // Alterado para Long
         FortuneCookie existing = findById(id);
         FortunePhrase phrase = phraseRepository.findById(phraseId)
                 .orElseThrow(() -> new RuntimeException("Frase não encontrada!"));
@@ -43,7 +42,7 @@ public class FortuneCookieService {
         return cookieRepository.save(existing);
     }
 
-    public void delete(UUID id) {
+    public void delete(Long id) { // Alterado para Long
         cookieRepository.deleteById(id);
     }
 }

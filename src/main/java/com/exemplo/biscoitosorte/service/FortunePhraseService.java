@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class FortunePhraseService {
@@ -25,18 +24,18 @@ public class FortunePhraseService {
         return repository.findAll();
     }
 
-    public FortunePhrase findById(UUID id) {
+    public FortunePhrase findById(Long id) { // Alterado para Long
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Frase não encontrada!"));
     }
 
-    public FortunePhrase update(UUID id, FortunePhrase phrase) {
+    public FortunePhrase update(Long id, FortunePhrase phrase) { // Alterado para Long
         FortunePhrase existing = findById(id);
         existing.setConteudo(phrase.getConteudo());
         existing.setAutor(phrase.getAutor());
         return repository.save(existing);
     }
 
-    public void delete(UUID id) {
+    public void delete(Long id) { // Alterado para Long
         repository.deleteById(id);
     }
 }

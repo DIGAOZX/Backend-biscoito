@@ -1,14 +1,13 @@
 package com.exemplo.biscoitosorte.entity;
 
 import jakarta.persistence.*;
-import java.util.UUID;
 
 @Entity
 public class FortunePhrase {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // Geração automática
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Geração automática sequencial (para banco com auto incremento)
+    private Long id;  // Alterado para Long
 
     @Column(nullable = false, unique = true)
     private String conteudo;
@@ -16,11 +15,11 @@ public class FortunePhrase {
     private String autor;
 
     // Getters e Setters
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

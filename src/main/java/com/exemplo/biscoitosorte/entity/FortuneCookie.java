@@ -1,14 +1,13 @@
 package com.exemplo.biscoitosorte.entity;
 
 import jakarta.persistence.*;
-import java.util.UUID;
 
 @Entity
 public class FortuneCookie {
 
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Geração automática sequencial
+    private Long id;  // Alterado para Long
 
     @Column(nullable = false)
     private String nome;
@@ -18,11 +17,11 @@ public class FortuneCookie {
     private FortunePhrase frase;
 
     // Getters e Setters
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

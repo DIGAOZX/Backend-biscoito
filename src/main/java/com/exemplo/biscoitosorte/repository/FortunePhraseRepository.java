@@ -4,8 +4,7 @@ import com.exemplo.biscoitosorte.entity.FortunePhrase;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
-import java.util.UUID;
 
-public interface FortunePhraseRepository extends JpaRepository<FortunePhrase, UUID> {
+public interface FortunePhraseRepository extends JpaRepository<FortunePhrase, Long> {
     Optional<FortunePhrase> findByConteudo(String conteudo);
 }
