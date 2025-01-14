@@ -1,5 +1,6 @@
-package com.exemplo.biscoitosorte.service;     
+package com.exemplo.biscoitosorte.service;
 
+import com.exemplo.biscoitosorte.dto.FortuneCookieDto;
 import com.exemplo.biscoitosorte.entity.FortuneCookie;
 import com.exemplo.biscoitosorte.entity.FortunePhrase;
 import com.exemplo.biscoitosorte.repository.FortuneCookieRepository;
@@ -18,31 +19,40 @@ public class FortuneCookieService {
     @Autowired
     private FortunePhraseRepository phraseRepository;
 
-    public FortuneCookie create(FortuneCookie cookie, Long phraseId) { // Alterado para Long
-        FortunePhrase phrase = phraseRepository.findById(phraseId)
-                .orElseThrow(() -> new RuntimeException("Frase não encontrada!"));
+    // Criar um novo biscoito associado a uma frase
+    public FortuneCookie create(FortuneCookieDto cookieDto) {
+        FortunePhrase phrase = phraseRepository.findById(cookieDto.getPhraseId()).orElse(null);
+        if (phrase == null) {
+            throw new RuntimeException("Frase com ID " + cookieDto.getPhraseId() + " não encontrada");
+        }
+    
+        FortuneCookie cookie = new FortuneCookie();
+        cookie.setNome(cookieDto.getNome());
         cookie.setFrase(phrase);
+    
         return cookieRepository.save(cookie);
     }
 
+    // Outros métodos do serviço
     public List<FortuneCookie> findAll() {
         return cookieRepository.findAll();
     }
 
-    public FortuneCookie findById(Long id) { // Alterado para Long
-        return cookieRepository.findById(id).orElseThrow(() -> new RuntimeException("Biscoito não encontrado!"));
+    public FortuneCookie findById(Long id) {
+        return cookieRepository.findById(id).orElse(null);
     }
 
-    public FortuneCookie update(Long id, FortuneCookie cookie, Long phraseId) { // Alterado para Long
-        FortuneCookie existing = findById(id);
-        FortunePhrase phrase = phraseRepository.findById(phraseId)
-                .orElseThrow(() -> new RuntimeException("Frase não encontrada!"));
-        existing.setNome(cookie.getNome());
-        existing.setFrase(phrase);
-        return cookieRepository.save(existing);
+    public FortuneCookie update(Long id, FortuneCookie cookie) {
+        FortuneCookie existingCookie = findById(id);
+        if (existingCookie == null) {
+            throw new RuntimeException("Biscoito com ID " + id + " não encontrado");
+        }
+        existingCookie.setNome(cookie.getNome());
+        existingCookie.setFrase(cookie.getFrase());
+        return cookieRepository.save(existingCookie);
     }
 
-    public void delete(Long id) { // Alterado para Long
+    public void delete(Long id) {
         cookieRepository.deleteById(id);
     }
 }

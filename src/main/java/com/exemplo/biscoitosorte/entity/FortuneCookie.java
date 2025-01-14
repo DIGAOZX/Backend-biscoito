@@ -6,14 +6,13 @@ import jakarta.persistence.*;
 public class FortuneCookie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Geração automática sequencial
-    private Long id;  // Alterado para Long
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(nullable = false)
     private String nome;
 
     @ManyToOne
-    @JoinColumn(name = "id_frase", nullable = false)
+    @JoinColumn(name = "id_frase", referencedColumnName = "id")
     private FortunePhrase frase;
 
     // Getters e Setters
