@@ -16,14 +16,13 @@ public class FortuneCookieController {
     @Autowired
     private FortuneCookieService cookieService;
 
-
     // Criar um novo biscoito, associando a uma frase existente
     @PostMapping
     public ResponseEntity<?> create(@RequestBody FortuneCookieDto cookieDto) {
         try {
             // Criar o biscoito utilizando o DTO
             FortuneCookie createdCookie = cookieService.create(cookieDto);
-            return ResponseEntity.ok(createdCookie);
+            return ResponseEntity.status(201).body(createdCookie);  // 201 CREATED
         } catch (RuntimeException ex) {
             return ResponseEntity.badRequest().body("Erro ao criar o biscoito: " + ex.getMessage());
         }
@@ -34,9 +33,9 @@ public class FortuneCookieController {
     public ResponseEntity<List<FortuneCookie>> findAll() {
         try {
             List<FortuneCookie> cookies = cookieService.findAll();
-            return ResponseEntity.ok(cookies);
+            return ResponseEntity.ok(cookies);  // 200 OK
         } catch (RuntimeException ex) {
-            return ResponseEntity.status(500).body(null);
+            return ResponseEntity.status(500).body(null);  // 500 INTERNAL SERVER ERROR
         }
     }
 
@@ -46,11 +45,11 @@ public class FortuneCookieController {
         try {
             FortuneCookie cookie = cookieService.findById(id);
             if (cookie == null) {
-                return ResponseEntity.status(404).body("Biscoito não encontrado com o ID: " + id);
+                return ResponseEntity.status(404).body("Biscoito não encontrado com o ID: " + id);  // 404 NOT FOUND
             }
-            return ResponseEntity.ok(cookie);
+            return ResponseEntity.ok(cookie);  // 200 OK
         } catch (RuntimeException ex) {
-            return ResponseEntity.status(404).body("Erro ao buscar o biscoito: " + ex.getMessage());
+            return ResponseEntity.status(404).body("Erro ao buscar o biscoito: " + ex.getMessage());  // 404 NOT FOUND
         }
     }
 
@@ -60,13 +59,13 @@ public class FortuneCookieController {
         try {
             FortuneCookie existingCookie = cookieService.findById(id);
             if (existingCookie == null) {
-                return ResponseEntity.status(404).body("Biscoito não encontrado com o ID: " + id);
+                return ResponseEntity.status(404).body("Biscoito não encontrado com o ID: " + id);  // 404 NOT FOUND
             }
 
             FortuneCookie updatedCookie = cookieService.update(id, cookie);
-            return ResponseEntity.ok(updatedCookie);
+            return ResponseEntity.ok(updatedCookie);  // 200 OK
         } catch (RuntimeException ex) {
-            return ResponseEntity.status(400).body("Erro ao atualizar o biscoito: " + ex.getMessage());
+            return ResponseEntity.status(400).body("Erro ao atualizar o biscoito: " + ex.getMessage());  // 400 BAD REQUEST
         }
     }
 
@@ -76,13 +75,13 @@ public class FortuneCookieController {
         try {
             FortuneCookie cookie = cookieService.findById(id);
             if (cookie == null) {
-                return ResponseEntity.status(404).build();
+                return ResponseEntity.status(404).build();  // 404 NOT FOUND
             }
 
             cookieService.delete(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();  // 204 NO CONTENT
         } catch (RuntimeException ex) {
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(404).build();  // 404 NOT FOUND
         }
     }
 }

@@ -1,9 +1,9 @@
 package com.exemplo.biscoitosorte.controller;
 
+import com.exemplo.biscoitosorte.dto.FortunePhraseDto;
 import com.exemplo.biscoitosorte.entity.FortunePhrase;
 import com.exemplo.biscoitosorte.service.FortunePhraseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,16 +14,22 @@ import java.util.List;
 public class FortunePhraseController {
 
     @Autowired
-    private FortunePhraseService service;
+    private FortunePhraseService phraseService;
 
     // Criar uma nova frase
     @PostMapping
-    public ResponseEntity<FortunePhrase> create(@RequestBody FortunePhrase phrase) {
+    public ResponseEntity<?> create(@RequestBody FortunePhraseDto phraseDto) {
         try {
-            FortunePhrase createdPhrase = service.create(phrase);
-            return new ResponseEntity<>(createdPhrase, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Erro ao criar frase
+            // Converte o DTO para a entidade
+            FortunePhrase phrase = new FortunePhrase();
+            phrase.setConteudo(phraseDto.getConteudo());
+            phrase.setAutor(phraseDto.getAutor());
+
+            // Criar a frase utilizando o serviço
+            FortunePhrase createdPhrase = phraseService.create(phrase);
+            return ResponseEntity.status(201).body(createdPhrase);  // Retorna a frase com código 201 CREATED
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body("Erro ao criar a frase: " + ex.getMessage());
         }
     }
 
@@ -31,32 +37,44 @@ public class FortunePhraseController {
     @GetMapping
     public ResponseEntity<List<FortunePhrase>> findAll() {
         try {
-            List<FortunePhrase> phrases = service.findAll();
+            List<FortunePhrase> phrases = phraseService.findAll();
             return ResponseEntity.ok(phrases);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Erro de servidor
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(500).body(null);
         }
     }
 
     // Buscar frase pelo ID
     @GetMapping("/{id}")
-    public ResponseEntity<FortunePhrase> findById(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable Long id) {
         try {
-            FortunePhrase phrase = service.findById(id);
+            FortunePhrase phrase = phraseService.findById(id);
+            if (phrase == null) {
+                return ResponseEntity.status(404).body("Frase não encontrada com o ID: " + id);  // 404 NOT FOUND
+            }
             return ResponseEntity.ok(phrase);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Frase não encontrada
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(404).body("Erro ao buscar a frase: " + ex.getMessage());  // 404 NOT FOUND
         }
     }
 
-    // Atualizar uma frase
+    // Atualizar uma frase existente
     @PutMapping("/{id}")
-    public ResponseEntity<FortunePhrase> update(@PathVariable Long id, @RequestBody FortunePhrase phrase) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody FortunePhraseDto phraseDto) {
         try {
-            FortunePhrase updatedPhrase = service.update(id, phrase);
+            FortunePhrase existingPhrase = phraseService.findById(id);
+            if (existingPhrase == null) {
+                return ResponseEntity.status(404).body("Frase não encontrada com o ID: " + id);
+            }
+
+            // Converte o DTO para a entidade
+            existingPhrase.setConteudo(phraseDto.getConteudo());
+            existingPhrase.setAutor(phraseDto.getAutor());
+
+            FortunePhrase updatedPhrase = phraseService.update(id, existingPhrase);
             return ResponseEntity.ok(updatedPhrase);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Erro ao atualizar frase
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(400).body("Erro ao atualizar a frase: " + ex.getMessage());
         }
     }
 
@@ -64,10 +82,15 @@ public class FortunePhraseController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
-            service.delete(id);
-            return ResponseEntity.noContent().build(); // Sucesso ao deletar
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Frase não encontrada
+            FortunePhrase phrase = phraseService.findById(id);
+            if (phrase == null) {
+                return ResponseEntity.status(404).build();
+            }
+
+            phraseService.delete(id);
+            return ResponseEntity.noContent().build();  // 204 NO CONTENT
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(404).build();
         }
     }
 }

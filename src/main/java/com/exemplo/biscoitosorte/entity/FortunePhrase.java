@@ -1,7 +1,7 @@
 package com.exemplo.biscoitosorte.entity;
 
-import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
@@ -17,7 +17,7 @@ public class FortunePhrase {
     private String autor;
 
     @OneToMany(mappedBy = "frase", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference  // Impede a serialização recursiva
+    @JsonBackReference // Impede a serialização recursiva
     private List<FortuneCookie> fortuneCookies;
 
     // Getters e Setters

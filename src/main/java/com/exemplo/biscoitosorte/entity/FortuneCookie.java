@@ -14,7 +14,7 @@ public class FortuneCookie {
 
     @ManyToOne
     @JoinColumn(name = "id_frase", referencedColumnName = "id")
-    @JsonManagedReference  // Marca a referência como gerenciada
+    @JsonManagedReference // Evita serialização recursiva
     private FortunePhrase frase;
 
     // Getters e Setters
