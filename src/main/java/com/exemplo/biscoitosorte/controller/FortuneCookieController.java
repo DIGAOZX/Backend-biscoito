@@ -55,14 +55,16 @@ public class FortuneCookieController {
 
     // Atualizar um biscoito existente
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody FortuneCookie cookie) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody FortuneCookieDto cookieDto) {
         try {
+            // Busca o biscoito existente
             FortuneCookie existingCookie = cookieService.findById(id);
             if (existingCookie == null) {
                 return ResponseEntity.status(404).body("Biscoito não encontrado com o ID: " + id);  // 404 NOT FOUND
             }
-
-            FortuneCookie updatedCookie = cookieService.update(id, cookie);
+    
+            // Atualiza o biscoito com os novos dados, incluindo a frase associada
+            FortuneCookie updatedCookie = cookieService.update(id, cookieDto);
             return ResponseEntity.ok(updatedCookie);  // 200 OK
         } catch (RuntimeException ex) {
             return ResponseEntity.status(400).body("Erro ao atualizar o biscoito: " + ex.getMessage());  // 400 BAD REQUEST

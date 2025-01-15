@@ -54,17 +54,23 @@ public class FortuneCookieService {
     }
 
     // Atualiza um biscoito existente
-    public FortuneCookie update(Long id, FortuneCookie cookie) {
+    public FortuneCookie update(Long id, FortuneCookieDto cookieDto) {
         // Busca o biscoito existente
         FortuneCookie existingCookie = findById(id);
         if (existingCookie == null) {
             throw new RuntimeException("Biscoito com ID " + id + " não encontrado");
         }
-
-        // Atualiza o biscoito
-        existingCookie.setNome(cookie.getNome());
-        existingCookie.setFrase(cookie.getFrase());
-
+    
+        // Busca a frase pelo ID (do DTO)
+        FortunePhrase phrase = phraseRepository.findById(cookieDto.getPhraseId()).orElse(null);
+        if (phrase == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Frase com ID " + cookieDto.getPhraseId() + " não encontrada");
+        }
+    
+        // Atualiza o biscoito com os dados do DTO e a nova frase
+        existingCookie.setNome(cookieDto.getNome());
+        existingCookie.setFrase(phrase);
+    
         // Salva e retorna o biscoito atualizado
         return cookieRepository.save(existingCookie);
     }
