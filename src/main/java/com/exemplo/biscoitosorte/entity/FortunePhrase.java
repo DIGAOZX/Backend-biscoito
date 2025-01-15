@@ -1,23 +1,23 @@
 package com.exemplo.biscoitosorte.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;  // Importar para usar @JsonIgnore
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.List;
 
 @Entity
 public class FortunePhrase {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Geração automática sequencial (para banco com auto incremento)
-    private Long id;  // Alterado para Long
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String conteudo;
 
     private String autor;
 
-    @OneToMany(mappedBy = "frase", cascade = CascadeType.ALL, orphanRemoval = true)  
-    @JsonIgnore  // Ignorar a serialização da lista fortuneCookies para evitar a circularidade
+    @OneToMany(mappedBy = "frase", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference  // Impede a serialização recursiva
     private List<FortuneCookie> fortuneCookies;
 
     // Getters e Setters

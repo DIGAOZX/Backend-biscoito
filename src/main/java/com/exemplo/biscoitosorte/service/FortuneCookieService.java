@@ -23,38 +23,53 @@ public class FortuneCookieService {
 
     // Criar um novo biscoito associado a uma frase
     public FortuneCookie create(FortuneCookieDto cookieDto) {
+        // Busca a frase associada ao ID fornecido
         FortunePhrase phrase = phraseRepository.findById(cookieDto.getPhraseId()).orElse(null);
         if (phrase == null) {
             // Se a frase não existir, retornamos um erro 400 Bad Request
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Frase com ID " + cookieDto.getPhraseId() + " não encontrada");
         }
 
+        // Cria um novo biscoito da sorte
         FortuneCookie cookie = new FortuneCookie();
         cookie.setNome(cookieDto.getNome());
         cookie.setFrase(phrase);
 
-        return cookieRepository.save(cookie);
+        // Salva e retorna o biscoito criado
+        FortuneCookie savedCookie = cookieRepository.save(cookie);
+        
+        // Retorna o biscoito com a frase associada
+        return savedCookie;
     }
 
-    // Outros métodos do serviço
+    // Retorna todos os biscoitos
     public List<FortuneCookie> findAll() {
         return cookieRepository.findAll();
     }
 
+    // Retorna um biscoito pelo ID
     public FortuneCookie findById(Long id) {
-        return cookieRepository.findById(id).orElse(null);
+        // Caso o biscoito não seja encontrado, lança uma exceção
+        return cookieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Biscoito não encontrado"));
     }
 
+    // Atualiza um biscoito existente
     public FortuneCookie update(Long id, FortuneCookie cookie) {
+        // Busca o biscoito existente
         FortuneCookie existingCookie = findById(id);
         if (existingCookie == null) {
             throw new RuntimeException("Biscoito com ID " + id + " não encontrado");
         }
+
+        // Atualiza o biscoito
         existingCookie.setNome(cookie.getNome());
         existingCookie.setFrase(cookie.getFrase());
+
+        // Salva e retorna o biscoito atualizado
         return cookieRepository.save(existingCookie);
     }
 
+    // Deleta um biscoito pelo ID
     public void delete(Long id) {
         cookieRepository.deleteById(id);
     }
