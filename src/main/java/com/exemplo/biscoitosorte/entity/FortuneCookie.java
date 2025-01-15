@@ -1,5 +1,6 @@
 package com.exemplo.biscoitosorte.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class FortuneCookie {
 
     @ManyToOne
     @JoinColumn(name = "id_frase", referencedColumnName = "id")
+    @JsonIgnore  // Ignora a serialização da frase diretamente, evitando a circularidade
     private FortunePhrase frase;
 
     // Getters e Setters

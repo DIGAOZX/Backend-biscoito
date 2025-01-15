@@ -1,6 +1,8 @@
 package com.exemplo.biscoitosorte.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;  // Importar para usar @JsonIgnore
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 public class FortunePhrase {
@@ -13,6 +15,10 @@ public class FortunePhrase {
     private String conteudo;
 
     private String autor;
+
+    @OneToMany(mappedBy = "frase", cascade = CascadeType.ALL, orphanRemoval = true)  
+    @JsonIgnore  // Ignorar a serialização da lista fortuneCookies para evitar a circularidade
+    private List<FortuneCookie> fortuneCookies;
 
     // Getters e Setters
     public Long getId() {
@@ -37,5 +43,13 @@ public class FortunePhrase {
 
     public void setAutor(String autor) {
         this.autor = autor;
+    }
+
+    public List<FortuneCookie> getFortuneCookies() {
+        return fortuneCookies;
+    }
+
+    public void setFortuneCookies(List<FortuneCookie> fortuneCookies) {
+        this.fortuneCookies = fortuneCookies;
     }
 }
