@@ -31,7 +31,7 @@ Biscoitos:
 Get: http://localhost:8080/api/biscoitos
 lista de criação
 
-Post: http://localhost:8080/api/frases
+Post: http://localhost:8080/api/biscoitos
 
 {
   "nome": "Biscoito da chocolate",
