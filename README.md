@@ -38,7 +38,11 @@ Post: http://localhost:8080/api/frases
   "phraseId": 8
 }
 
-Put: não é permitido 
+Put:http://localhost:8080/api/biscoitos/(coloque o id)
 
+{
+  "nome": "Biscoito de banana",
+  "phraseId": 8
+}
 
-Delete: http://localhost:8080/api/biscoitos/2
+Delete: http://localhost:8080/api/biscoitos/(coloque o id)
