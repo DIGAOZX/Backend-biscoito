@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/biscoitos")
-public class FortuneCookieController {
+public class FortuneCookieController {     
 
     @Autowired
     private FortuneCookieService cookieService;
