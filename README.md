@@ -1,5 +1,4 @@
 
-Claro! Aqui está uma sugestão de descrição para o seu projeto no GitHub:
 
 Biscoito da Sorte API
 Este projeto é uma API RESTful desenvolvida em Java utilizando Spring Boot. O objetivo da API é gerenciar biscoitos da sorte e suas frases inspiradoras. O projeto permite criar, atualizar, buscar e deletar biscoitos da sorte e frases, sendo possível associar cada biscoito a uma frase.
